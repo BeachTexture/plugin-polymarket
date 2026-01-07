@@ -28,6 +28,12 @@ export { createApiKeyAction } from './actions/createApiKey';
 export { revokeApiKeyAction } from './actions/revokeApiKey';
 export { getAllApiKeysAction } from './actions/getAllApiKeys';
 
+// PolyClaude Arbitrage Hunter exports
+export { scanIntraMarketArbAction } from './actions/scanIntraMarketArb';
+export { PolyClaudeService } from './services/polyClaudeService';
+export { TelegramBotService, createTelegramBot } from './services/telegramBot';
+export { TerminalServer, createTerminalServer } from './services/terminalServer';
+
 // Export utilities and services for advanced use cases
 export { initializeClobClient } from './utils/clobClient';
 export { callLLMWithTimeout } from './utils/llmHelpers';
@@ -57,6 +63,21 @@ export type {
   OrderType,
   MarketOrderRequest,
 } from './types';
+
+// PolyClaude Arbitrage Hunter types
+export type {
+  ArbitrageType,
+  RiskLevel,
+  OpportunityStatus,
+  ArbMarketSide,
+  IntraMarketArbData,
+  ArbitrageOpportunity,
+  ScannerConfig,
+  AlertConfig,
+  ArbitrageAlert,
+  ScannerStats,
+  TerminalState,
+} from './types/arbitrage';
 
 /**
  * Represents the default character (Eliza) with her specific attributes and behaviors.

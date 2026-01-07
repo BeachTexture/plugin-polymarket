@@ -38,6 +38,9 @@ import { getTradeHistoryAction } from './actions/getTradeHistory';
 import { handleAuthenticationAction } from './actions/handleAuthentication';
 import { setupWebsocketAction } from './actions/setupWebsocket';
 import { handleRealtimeUpdatesAction } from './actions/handleRealtimeUpdates';
+// PolyClaude Arbitrage Hunter
+import { scanIntraMarketArbAction } from './actions/scanIntraMarketArb';
+import { PolyClaudeService } from './services/polyClaudeService';
 
 /**
  * Define the configuration schema for the Polymarket plugin
@@ -96,6 +99,13 @@ const configSchema = z.object({
       }
       return val;
     }),
+  // PolyClaude Arbitrage Hunter config
+  TELEGRAM_BOT_TOKEN: z.string().optional(),
+  TELEGRAM_CHAT_ID: z.string().optional(),
+  POLYCLAUDE_WEB_PORT: z.string().optional().default('3333'),
+  POLYCLAUDE_AUTO_SCAN: z.string().optional().default('true'),
+  POLYCLAUDE_MIN_PROFIT: z.string().optional().default('0.5'),
+  POLYCLAUDE_MAX_RISK: z.string().optional().default('7'),
 });
 
 /**
@@ -179,6 +189,13 @@ const plugin: Plugin = {
     PRIVATE_KEY: process.env.PRIVATE_KEY,
     CLOB_API_KEY: process.env.CLOB_API_KEY,
     POLYMARKET_PRIVATE_KEY: process.env.POLYMARKET_PRIVATE_KEY,
+    // PolyClaude config
+    TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
+    TELEGRAM_CHAT_ID: process.env.TELEGRAM_CHAT_ID,
+    POLYCLAUDE_WEB_PORT: process.env.POLYCLAUDE_WEB_PORT,
+    POLYCLAUDE_AUTO_SCAN: process.env.POLYCLAUDE_AUTO_SCAN,
+    POLYCLAUDE_MIN_PROFIT: process.env.POLYCLAUDE_MIN_PROFIT,
+    POLYCLAUDE_MAX_RISK: process.env.POLYCLAUDE_MAX_RISK,
   },
   async init(config: Record<string, string>) {
     logger.info('*** Initializing Polymarket plugin ***');
@@ -200,7 +217,7 @@ const plugin: Plugin = {
       throw error;
     }
   },
-  services: [PolymarketService],
+  services: [PolymarketService, PolyClaudeService],
   actions: [
     retrieveAllMarketsAction,
     getSimplifiedMarketsAction,
@@ -226,6 +243,8 @@ const plugin: Plugin = {
     handleAuthenticationAction,
     setupWebsocketAction,
     handleRealtimeUpdatesAction,
+    // PolyClaude Arbitrage Hunter
+    scanIntraMarketArbAction,
   ],
   providers: [polymarketProvider],
 };
