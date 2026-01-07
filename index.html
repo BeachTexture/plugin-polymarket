@@ -3,755 +3,729 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PolyClaude | AI-Powered Arbitrage Hunter</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>PolyClaude | Live Arbitrage Scanner</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --claude-orange: #D97706;
-      --claude-orange-light: #F59E0B;
-      --claude-orange-dark: #B45309;
-      --claude-cream: #FEF3C7;
-      --claude-sand: #F5F0E6;
-      --bg-primary: #1A1A1A;
-      --bg-secondary: #242424;
-      --bg-tertiary: #2D2D2D;
-      --text-primary: #FAFAFA;
-      --text-secondary: #A3A3A3;
-      --text-muted: #737373;
-      --border-color: #404040;
-      --success: #22C55E;
-      --warning: #EAB308;
-      --error: #EF4444;
+      --claude-orange: #E07A3A;
+      --claude-coral: #E4775B;
+      --bg-dark: #0a0a0f;
+      --bg-card: #12121a;
+      --bg-terminal: #0d0d14;
+      --text-primary: #e8e6e3;
+      --text-dim: #6b7280;
+      --green: #10b981;
+      --red: #ef4444;
+      --yellow: #f59e0b;
+      --blue: #3b82f6;
     }
 
     body {
-      background: var(--bg-primary);
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      background: var(--bg-dark);
       color: var(--text-primary);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
-      line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    /* Scanline effect */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0,0,0,0.1) 0px,
+        rgba(0,0,0,0.1) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 1000;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
 
     /* Header */
     .header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 20px 0;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border-color);
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid rgba(224, 122, 58, 0.3);
+      margin-bottom: 20px;
     }
 
-    .logo-section { display: flex; align-items: center; gap: 16px; }
-
-    .claude-icon {
-      width: 48px; height: 48px;
-      background: linear-gradient(135deg, var(--claude-orange), var(--claude-orange-dark));
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px;
-      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .logo-text { display: flex; flex-direction: column; }
-
-    .logo-title {
-      font-size: 1.75rem; font-weight: 700;
-      background: linear-gradient(135deg, var(--claude-orange-light), var(--claude-orange));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .logo-subtitle { font-size: 0.85rem; color: var(--text-secondary); font-weight: 500; }
-
-    .powered-by {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 16px;
-      background: var(--bg-secondary);
-      border-radius: 8px;
-      border: 1px solid var(--border-color);
-    }
-
-    .powered-by-text { font-size: 0.8rem; color: var(--text-secondary); }
-
-    .claude-badge {
-      display: flex; align-items: center; gap: 6px;
-      padding: 4px 10px;
-      background: linear-gradient(135deg, var(--claude-orange), var(--claude-orange-dark));
-      border-radius: 6px;
-      font-size: 0.75rem; font-weight: 600; color: white;
-    }
-
-    .live-indicator {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 12px;
-      background: rgba(34, 197, 94, 0.1);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      border-radius: 20px;
-      font-size: 0.8rem; color: var(--success);
-    }
-
-    .live-dot {
-      width: 8px; height: 8px;
-      background: var(--success);
-      border-radius: 50%;
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--claude-orange), var(--claude-coral));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
       animation: pulse 2s infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.9); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(224, 122, 58, 0.4); }
+      50% { box-shadow: 0 0 20px 5px rgba(224, 122, 58, 0.2); }
     }
 
-    /* Control Bar */
-    .control-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 20px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      margin-bottom: 24px;
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--claude-orange), var(--claude-coral));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .control-group { display: flex; align-items: center; gap: 12px; }
-
-    .control-btn {
-      display: flex; align-items: center; gap: 8px;
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       padding: 8px 16px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      color: var(--text-secondary);
-      font-size: 0.85rem; font-family: inherit;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--green);
     }
 
-    .control-btn:hover { border-color: var(--claude-orange); color: var(--text-primary); }
-
-    .control-btn.active {
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(217, 119, 6, 0.1));
-      border-color: var(--claude-orange);
-      color: var(--claude-orange);
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: blink 1s infinite;
     }
 
-    .control-btn .shortcut {
-      padding: 2px 6px;
-      background: var(--bg-primary);
-      border-radius: 4px;
-      font-size: 0.7rem;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text-muted);
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
-
-    .shortcuts-hint { display: flex; align-items: center; gap: 16px; font-size: 0.75rem; color: var(--text-muted); }
-    .shortcut-item { display: flex; align-items: center; gap: 6px; }
-    .shortcut-key {
-      padding: 3px 8px;
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--text-secondary);
-    }
-
-    .sound-indicator {
-      display: flex; align-items: center; gap: 6px;
-      padding: 6px 12px; border-radius: 20px;
-      font-size: 0.8rem; transition: all 0.2s ease;
-    }
-    .sound-indicator.on { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: var(--success); }
-    .sound-indicator.off { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--error); }
 
     /* Stats Grid */
-    .stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 24px; }
-
-    .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
-      transition: all 0.2s ease;
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
     }
 
-    .stat-card:hover { border-color: var(--claude-orange); transform: translateY(-2px); }
-    .stat-card.highlight {
-      background: linear-gradient(135deg, rgba(217, 119, 6, 0.1), rgba(217, 119, 6, 0.05));
-      border-color: var(--claude-orange);
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--claude-orange), transparent);
     }
 
     .stat-label {
-      font-size: 0.75rem; color: var(--text-muted);
-      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
     }
 
     .stat-value {
-      font-size: 2rem; font-weight: 700;
+      font-size: 28px;
+      font-weight: bold;
       color: var(--text-primary);
-      font-family: 'JetBrains Mono', monospace;
     }
 
+    .stat-value.green { color: var(--green); }
     .stat-value.orange { color: var(--claude-orange); }
-    .stat-value.green { color: var(--success); }
+    .stat-value.yellow { color: var(--yellow); }
 
-    /* Main Grid */
-    .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
-    .secondary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 24px; }
+    /* Main Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 20px;
+    }
 
-    .terminal-section {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+    /* Terminal */
+    .terminal {
+      background: var(--bg-terminal);
+      border: 1px solid rgba(255,255,255,0.05);
       border-radius: 12px;
       overflow: hidden;
     }
 
-    .terminal-section.focused { border-color: var(--claude-orange); box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.2); }
-
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 20px;
-      background: var(--bg-tertiary);
-      border-bottom: 1px solid var(--border-color);
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    .section-title { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.95rem; }
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
 
-    .section-icon {
-      width: 32px; height: 32px;
-      background: linear-gradient(135deg, var(--claude-orange), var(--claude-orange-dark));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27ca40; }
+
+    .terminal-title {
+      margin-left: 10px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .terminal-body {
+      height: 500px;
+      overflow-y: auto;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .terminal-body::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .terminal-body::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .terminal-body::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 3px;
+    }
+
+    .log-line {
+      margin-bottom: 4px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .log-time {
+      color: var(--text-dim);
+      margin-right: 10px;
+    }
+
+    .log-info { color: var(--blue); }
+    .log-success { color: var(--green); }
+    .log-warning { color: var(--yellow); }
+    .log-error { color: var(--red); }
+    .log-scan { color: var(--claude-orange); }
+
+    /* Opportunities Panel */
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .panel-body {
-      height: 400px; overflow-y: auto; padding: 16px;
+      padding: 16px;
+      height: 456px;
+      overflow-y: auto;
     }
 
-    .panel-body::-webkit-scrollbar { width: 6px; }
-    .panel-body::-webkit-scrollbar-track { background: transparent; }
-    .panel-body::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-
-    /* Cards */
-    .market-card {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 14px;
-      margin-bottom: 10px;
-      transition: all 0.2s ease;
+    .opportunity-card {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 12px;
+      animation: slideIn 0.5s ease;
     }
 
-    .market-card:hover { border-color: var(--claude-orange); }
-    .market-card.opportunity { border-left: 4px solid var(--success); }
-    .market-card.near-miss { border-left: 3px solid var(--warning); }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    .market-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-    .market-question { font-weight: 500; font-size: 0.85rem; color: var(--text-primary); flex: 1; margin-right: 10px; line-height: 1.3; }
+    .opportunity-card.near-miss {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
 
-    .market-badge {
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.7rem; font-weight: 600;
+    .opp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .opp-question {
+      font-size: 12px;
+      color: var(--text-primary);
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .opp-profit {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--green);
       white-space: nowrap;
     }
 
-    .market-badge.profit { background: linear-gradient(135deg, var(--success), #16A34A); color: white; }
-    .market-badge.near-miss { background: rgba(234, 179, 8, 0.15); border: 1px solid rgba(234, 179, 8, 0.3); color: var(--warning); }
-    .market-badge.category { background: rgba(217, 119, 6, 0.15); border: 1px solid rgba(217, 119, 6, 0.3); color: var(--claude-orange); text-transform: uppercase; }
-
-    .market-prices {
-      display: flex; gap: 16px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.8rem; margin-bottom: 8px;
+    .opp-details {
+      display: flex;
+      gap: 15px;
+      font-size: 11px;
+      color: var(--text-dim);
     }
 
-    .market-price { display: flex; align-items: center; gap: 6px; }
-    .price-label { color: var(--text-muted); font-size: 0.7rem; }
-    .price-value { font-weight: 600; }
-    .price-value.yes { color: var(--success); }
-    .price-value.no { color: var(--error); }
-
-    .market-meta { display: flex; gap: 16px; font-size: 0.7rem; color: var(--text-muted); }
-    .market-meta span { display: flex; align-items: center; gap: 4px; }
-
-    .empty-state {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      height: 100%; color: var(--text-muted);
-      text-align: center; padding: 40px;
-    }
-
-    .empty-icon {
-      width: 64px; height: 64px;
-      background: var(--bg-tertiary);
-      border-radius: 16px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; margin-bottom: 16px;
-    }
-
-    .empty-title { font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
-
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 24px; right: 24px;
-      padding: 12px 20px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--claude-orange);
-      border-radius: 10px;
-      color: var(--text-primary);
-      font-size: 0.9rem;
-      display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-
-    .toast.show { transform: translateY(0); opacity: 1; }
-
-    /* Footer */
-    .footer {
-      margin-top: 32px; padding-top: 24px;
-      border-top: 1px solid var(--border-color);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .footer-brand { display: flex; align-items: center; gap: 12px; }
-    .footer-claude { display: flex; align-items: center; gap: 8px; color: var(--text-muted); font-size: 0.85rem; }
-
-    .footer-claude-icon {
-      width: 24px; height: 24px;
-      background: linear-gradient(135deg, var(--claude-orange), var(--claude-orange-dark));
-      border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
+    .market-item {
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
       font-size: 12px;
     }
 
-    .footer-links { display: flex; gap: 24px; font-size: 0.8rem; color: var(--text-muted); }
-    .footer-links a { color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
-    .footer-links a:hover { color: var(--claude-orange); }
+    .market-item:last-child {
+      border-bottom: none;
+    }
+
+    .market-question {
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+
+    .market-stats {
+      display: flex;
+      gap: 15px;
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+
+    .market-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Sound Toggle */
+    .controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-primary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--claude-orange);
+    }
+
+    /* Progress bar */
+    .scan-progress {
+      height: 3px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 2px;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+
+    .scan-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--claude-orange), var(--claude-coral));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
 
     /* Responsive */
     @media (max-width: 1024px) {
-      .stats-grid { grid-template-columns: repeat(3, 1fr); }
-      .main-grid, .secondary-grid { grid-template-columns: 1fr; }
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
-    @media (max-width: 640px) {
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .header { flex-direction: column; gap: 16px; }
-      .control-bar { flex-direction: column; gap: 12px; }
-      .shortcuts-hint { display: none; }
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Glow effect for arb found */
+    .arb-alert {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(16, 185, 129, 0.95);
+      color: white;
+      padding: 30px 50px;
+      border-radius: 16px;
+      font-size: 24px;
+      font-weight: bold;
+      z-index: 2000;
+      animation: alertPop 0.5s ease;
+      display: none;
+    }
+
+    @keyframes alertPop {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      50% { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <header class="header">
-      <div class="logo-section">
-        <div class="claude-icon">🤖</div>
-        <div class="logo-text">
-          <div class="logo-title">PolyClaude</div>
-          <div class="logo-subtitle">AI-Powered Arbitrage Hunter</div>
-        </div>
+      <div class="logo">
+        <div class="logo-icon">🔮</div>
+        <span class="logo-text">PolyClaude</span>
       </div>
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <div class="powered-by">
-          <span class="powered-by-text">Powered by</span>
-          <div class="claude-badge"><span>⚡</span><span>Claude AI</span></div>
-        </div>
-        <div class="live-indicator">
-          <div class="live-dot"></div>
-          <span>LIVE</span>
-        </div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        <span>SCANNING LIVE</span>
+      </div>
+      <div class="controls">
+        <button class="btn" id="soundToggle">🔊 Sound: ON</button>
+        <button class="btn" id="pauseToggle">⏸ Pause</button>
       </div>
     </header>
-
-    <div class="control-bar">
-      <div class="control-group">
-        <button class="control-btn" id="soundToggle" onclick="toggleSound()">
-          <span id="soundIcon">🔔</span>
-          <span id="soundText">Sound On</span>
-          <span class="shortcut">S</span>
-        </button>
-        <button class="control-btn" onclick="forceRefresh()">
-          <span>🔄</span><span>Refresh</span><span class="shortcut">R</span>
-        </button>
-        <button class="control-btn" onclick="testSound()">
-          <span>🎵</span><span>Test Alert</span>
-        </button>
-        <div class="sound-indicator on" id="soundStatus">
-          <span>🔊</span><span>Alerts Active</span>
-        </div>
-      </div>
-      <div class="shortcuts-hint">
-        <div class="shortcut-item"><span class="shortcut-key">1-4</span><span>Focus Panel</span></div>
-        <div class="shortcut-item"><span class="shortcut-key">R</span><span>Refresh</span></div>
-        <div class="shortcut-item"><span class="shortcut-key">S</span><span>Sound</span></div>
-        <div class="shortcut-item"><span class="shortcut-key">?</span><span>Help</span></div>
-      </div>
-    </div>
 
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Markets Scanned</div>
-        <div class="stat-value" id="marketsScanned">-</div>
+        <div class="stat-value" id="marketsScanned">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Refresh Rate</div>
-        <div class="stat-value" id="refreshRate">10s</div>
+        <div class="stat-label">Opportunities Found</div>
+        <div class="stat-value green" id="oppsFound">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Opportunities</div>
-        <div class="stat-value orange" id="totalFound">0</div>
+        <div class="stat-label">Near Misses</div>
+        <div class="stat-value yellow" id="nearMisses">0</div>
       </div>
-      <div class="stat-card highlight">
+      <div class="stat-card">
         <div class="stat-label">Best Profit</div>
-        <div class="stat-value green" id="bestProfit">0.00%</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Status</div>
-        <div class="stat-value" id="status" style="font-size: 1rem;">● Ready</div>
+        <div class="stat-value orange" id="bestProfit">0%</div>
       </div>
     </div>
 
-    <div class="main-grid">
-      <div class="terminal-section">
-        <div class="section-header">
-          <div class="section-title">
-            <div class="section-icon">💰</div>
-            <span>Arbitrage Opportunities</span>
-          </div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);" id="oppCount">0 found</span>
-        </div>
-        <div class="panel-body" id="opportunitiesOutput">
-          <div class="empty-state">
-            <div class="empty-icon">🔍</div>
-            <div class="empty-title">Scanning Markets...</div>
-            <div>Claude is analyzing Polymarket for arbitrage</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="terminal-section">
-        <div class="section-header">
-          <div class="section-title">
-            <div class="section-icon" style="background: linear-gradient(135deg, #EAB308, #CA8A04);">⚡</div>
-            <span>Near-Miss Opportunities</span>
-          </div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);" id="nearMissCount">0 tracking</span>
-        </div>
-        <div class="panel-body" id="nearMissOutput">
-          <div class="empty-state">
-            <div class="empty-icon">⚡</div>
-            <div class="empty-title">Watching for Near-Misses</div>
-            <div>Markets within 5% of arbitrage threshold</div>
-          </div>
-        </div>
-      </div>
+    <div class="scan-progress">
+      <div class="scan-progress-bar" id="progressBar"></div>
     </div>
 
-    <div class="secondary-grid">
-      <div class="terminal-section" style="grid-column: span 2;">
-        <div class="section-header">
-          <div class="section-title">
-            <div class="section-icon" style="background: linear-gradient(135deg, #22C55E, #16A34A);">📊</div>
-            <span>Live Market Feed</span>
-          </div>
-          <span style="font-size: 0.75rem; color: var(--text-muted);" id="liveMarketCount">0 markets</span>
+    <div class="main-grid" style="margin-top: 20px;">
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">polymarket-scanner.exe</span>
         </div>
-        <div class="panel-body" id="liveMarketsOutput" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; height: auto; max-height: 500px;">
-          <div class="empty-state" style="grid-column: span 3;">
-            <div class="empty-icon">📊</div>
-            <div class="empty-title">Loading Markets</div>
-            <div>Top markets by liquidity</div>
-          </div>
+        <div class="terminal-body" id="terminal"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title">💰 Live Opportunities</span>
+          <span id="oppCount" style="color: var(--text-dim); font-size: 12px;">0 active</span>
         </div>
+        <div class="panel-body" id="opportunities"></div>
       </div>
     </div>
-
-    <footer class="footer">
-      <div class="footer-brand">
-        <div class="footer-claude">
-          <div class="footer-claude-icon">🤖</div>
-          <span>Built with Claude AI by Anthropic</span>
-        </div>
-      </div>
-      <div class="footer-links">
-        <span>PolyClaude v1.0</span>
-        <a href="https://polymarket.com" target="_blank">Polymarket</a>
-        <a href="https://anthropic.com" target="_blank">Anthropic</a>
-      </div>
-    </footer>
   </div>
 
-  <div class="toast" id="toast">
-    <span id="toastIcon">🔔</span>
-    <span id="toastMessage">Sound enabled</span>
+  <div class="arb-alert" id="arbAlert">
+    💰 ARBITRAGE FOUND!
   </div>
 
   <script>
-    // ============== SOUND SYSTEM ==============
-    let soundEnabled = localStorage.getItem('polyclaude_sound') !== 'false';
-    let audioContext = null;
-    let lastAlertCount = 0;
+    const terminal = document.getElementById('terminal');
+    const opportunities = document.getElementById('opportunities');
+    const progressBar = document.getElementById('progressBar');
+    const arbAlert = document.getElementById('arbAlert');
 
-    function initAudio() {
-      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      return audioContext;
-    }
+    let soundEnabled = true;
+    let paused = false;
+    let totalScanned = 0;
+    let totalOpps = 0;
+    let scanCount = 0;
 
-    function playTone(frequency, duration, type = 'sine', volume = 0.3) {
-      try {
-        const ctx = initAudio();
-        const oscillator = ctx.createOscillator();
-        const gainNode = ctx.createGain();
-        oscillator.connect(gainNode);
-        gainNode.connect(ctx.destination);
-        oscillator.frequency.value = frequency;
-        oscillator.type = type;
-        gainNode.gain.setValueAtTime(volume, ctx.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-        oscillator.start(ctx.currentTime);
-        oscillator.stop(ctx.currentTime + duration);
-      } catch (e) { console.log('Audio error:', e); }
-    }
+    // Audio context for sounds
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    function playAlertSound(profitPercent = 1) {
+    function playBeep(freq = 800, duration = 100, type = 'sine') {
       if (!soundEnabled) return;
-      if (profitPercent >= 5) {
-        playTone(880, 0.15, 'sine', 0.4);
-        setTimeout(() => playTone(1100, 0.15, 'sine', 0.4), 150);
-        setTimeout(() => playTone(1320, 0.2, 'sine', 0.5), 300);
-      } else if (profitPercent >= 2) {
-        playTone(660, 0.15, 'sine', 0.35);
-        setTimeout(() => playTone(880, 0.2, 'sine', 0.4), 150);
-      } else {
-        playTone(520, 0.25, 'sine', 0.3);
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.frequency.value = freq;
+      oscillator.type = type;
+      gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration / 1000);
+      oscillator.start(audioCtx.currentTime);
+      oscillator.stop(audioCtx.currentTime + duration / 1000);
+    }
+
+    function playSuccess() {
+      playBeep(523, 100);
+      setTimeout(() => playBeep(659, 100), 100);
+      setTimeout(() => playBeep(784, 150), 200);
+    }
+
+    function playAlert() {
+      playBeep(880, 200, 'square');
+      setTimeout(() => playBeep(880, 200, 'square'), 250);
+      setTimeout(() => playBeep(1100, 300, 'square'), 500);
+    }
+
+    function getTime() {
+      return new Date().toLocaleTimeString('en-US', { hour12: false });
+    }
+
+    function log(message, type = 'info') {
+      const line = document.createElement('div');
+      line.className = 'log-line';
+      line.innerHTML = `<span class="log-time">[${getTime()}]</span><span class="log-${type}">${message}</span>`;
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+
+      // Keep only last 200 lines
+      while (terminal.children.length > 200) {
+        terminal.removeChild(terminal.firstChild);
       }
     }
 
-    function playNotificationSound() {
-      if (!soundEnabled) return;
-      playTone(440, 0.1, 'sine', 0.2);
+    function updateStats(stats) {
+      document.getElementById('marketsScanned').textContent = stats.marketsScanned || 0;
+      document.getElementById('oppsFound').textContent = stats.totalFound || 0;
+      document.getElementById('nearMisses').textContent = stats.nearMissCount || 0;
+      document.getElementById('bestProfit').textContent = (stats.bestProfit || 0).toFixed(2) + '%';
+      document.getElementById('oppCount').textContent = `${stats.totalFound || 0} active`;
     }
 
-    function testSound() {
-      initAudio();
-      showToast('🎵', 'Playing test sounds...');
-      playTone(520, 0.2, 'sine', 0.3);
-      setTimeout(() => { playTone(660, 0.15, 'sine', 0.35); setTimeout(() => playTone(880, 0.2, 'sine', 0.4), 150); }, 400);
-      setTimeout(() => { playTone(880, 0.15, 'sine', 0.4); setTimeout(() => playTone(1100, 0.15, 'sine', 0.4), 150); setTimeout(() => playTone(1320, 0.2, 'sine', 0.5), 300); }, 900);
-    }
+    function renderOpportunities(opps, nearMisses) {
+      opportunities.innerHTML = '';
 
-    function toggleSound() {
-      soundEnabled = !soundEnabled;
-      localStorage.setItem('polyclaude_sound', soundEnabled);
-      updateSoundUI();
-      if (soundEnabled) { initAudio(); playNotificationSound(); showToast('🔔', 'Sound alerts enabled'); }
-      else { showToast('🔕', 'Sound alerts disabled'); }
-    }
+      if (opps && opps.length > 0) {
+        opps.forEach(opp => {
+          const card = document.createElement('div');
+          card.className = 'opportunity-card';
+          card.innerHTML = `
+            <div class="opp-header">
+              <div class="opp-question">${opp.question}</div>
+              <div class="opp-profit">+${opp.arbitrage?.profitPercent?.toFixed(2) || 0}%</div>
+            </div>
+            <div class="opp-details">
+              <span>Type: ${opp.arbitrage?.type || 'N/A'}</span>
+              <span>Combined: ${opp.combinedAsk?.toFixed(3) || 'N/A'}</span>
+            </div>
+          `;
+          opportunities.appendChild(card);
+        });
+      }
 
-    function updateSoundUI() {
-      const btn = document.getElementById('soundToggle');
-      const icon = document.getElementById('soundIcon');
-      const text = document.getElementById('soundText');
-      const status = document.getElementById('soundStatus');
-      if (soundEnabled) {
-        btn.classList.add('active');
-        icon.textContent = '🔔'; text.textContent = 'Sound On';
-        status.className = 'sound-indicator on';
-        status.innerHTML = '<span>🔊</span><span>Alerts Active</span>';
-      } else {
-        btn.classList.remove('active');
-        icon.textContent = '🔕'; text.textContent = 'Sound Off';
-        status.className = 'sound-indicator off';
-        status.innerHTML = '<span>🔇</span><span>Alerts Muted</span>';
+      if (nearMisses && nearMisses.length > 0) {
+        nearMisses.slice(0, 5).forEach(nm => {
+          const card = document.createElement('div');
+          card.className = 'opportunity-card near-miss';
+          card.innerHTML = `
+            <div class="opp-header">
+              <div class="opp-question">${nm.question}</div>
+              <div class="opp-profit" style="color: var(--yellow);">${nm.deviationPercent}% off</div>
+            </div>
+            <div class="opp-details">
+              <span>Direction: ${nm.direction}</span>
+              <span>Spread: ${nm.spreadPercent}%</span>
+            </div>
+          `;
+          opportunities.appendChild(card);
+        });
+      }
+
+      if ((!opps || opps.length === 0) && (!nearMisses || nearMisses.length === 0)) {
+        opportunities.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 40px;">Scanning for opportunities...</div>';
       }
     }
 
-    // ============== TOAST ==============
-    let toastTimeout = null;
-    function showToast(icon, message, duration = 2500) {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastIcon').textContent = icon;
-      document.getElementById('toastMessage').textContent = message;
-      toast.classList.add('show');
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => toast.classList.remove('show'), duration);
-    }
+    async function scan() {
+      if (paused) return;
 
-    // ============== KEYBOARD SHORTCUTS ==============
-    function forceRefresh() {
-      showToast('🔄', 'Refreshing data...');
-      fetchData();
-      playNotificationSound();
-    }
+      scanCount++;
+      log(`Initiating scan #${scanCount}...`, 'scan');
+      playBeep(400, 50);
 
-    function focusPanel(index) {
-      document.querySelectorAll('.terminal-section').forEach(p => p.classList.remove('focused'));
-      const panels = document.querySelectorAll('.terminal-section');
-      if (index >= 0 && index < panels.length) {
-        panels[index].classList.add('focused');
-        panels[index].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const names = ['Opportunities', 'Near-Misses', 'Live Markets'];
-        showToast('📌', 'Focused: ' + names[index]);
-        playNotificationSound();
-      }
-    }
+      // Animate progress
+      progressBar.style.width = '0%';
+      let progress = 0;
+      const progressInterval = setInterval(() => {
+        progress += 2;
+        progressBar.style.width = Math.min(progress, 90) + '%';
+      }, 50);
 
-    document.addEventListener('keydown', (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      switch(e.key.toLowerCase()) {
-        case 'r': e.preventDefault(); forceRefresh(); break;
-        case 's': e.preventDefault(); toggleSound(); break;
-        case '1': e.preventDefault(); focusPanel(0); break;
-        case '2': e.preventDefault(); focusPanel(1); break;
-        case '3': e.preventDefault(); focusPanel(2); break;
-        case '?': e.preventDefault(); showToast('⌨️', 'R=Refresh, S=Sound, 1-3=Panels', 4000); break;
-        case 'escape': document.querySelectorAll('.terminal-section').forEach(p => p.classList.remove('focused')); break;
-      }
-    });
-
-    // ============== DATA FETCHING ==============
-    function formatOpportunity(opp) {
-      const arb = opp.arbitrage;
-      return `
-        <div class="market-card opportunity">
-          <div class="market-header">
-            <div class="market-question">${opp.question.slice(0, 60)}${opp.question.length > 60 ? '...' : ''}</div>
-            <div class="market-badge profit">+${arb.profitPercent.toFixed(2)}%</div>
-          </div>
-          <div class="market-prices">
-            <div class="market-price"><span class="price-label">YES</span><span class="price-value yes">$${opp.yesPrice.toFixed(3)}</span></div>
-            <div class="market-price"><span class="price-label">NO</span><span class="price-value no">$${opp.noPrice.toFixed(3)}</span></div>
-            <div class="market-price"><span class="price-label">SUM</span><span class="price-value" style="color: var(--warning)">$${arb.combinedAsk.toFixed(3)}</span></div>
-          </div>
-          <div class="market-meta">
-            <span>💰 ${arb.type === 'BUY_BOTH' ? 'Buy Both' : 'Sell Both'}</span>
-            <span>💧 $${opp.liquidity.toFixed(0)} liquidity</span>
-          </div>
-        </div>
-      `;
-    }
-
-    function formatNearMiss(nm) {
-      return `
-        <div class="market-card near-miss">
-          <div class="market-header">
-            <div class="market-question">${nm.question.slice(0, 60)}${nm.question.length > 60 ? '...' : ''}</div>
-            <div class="market-badge near-miss">${nm.direction === 'UNDERPRICED' ? '📉' : '📈'} ${nm.deviationPercent}% off</div>
-          </div>
-          <div class="market-prices">
-            <div class="market-price"><span class="price-label">YES</span><span class="price-value">$${nm.yesAsk.toFixed(3)}</span></div>
-            <div class="market-price"><span class="price-label">NO</span><span class="price-value">$${nm.noAsk.toFixed(3)}</span></div>
-            <div class="market-price"><span class="price-label">SUM</span><span class="price-value" style="color: var(--warning)">$${nm.combinedAsk.toFixed(3)}</span></div>
-          </div>
-        </div>
-      `;
-    }
-
-    function formatLiveMarket(market) {
-      return `
-        <div class="market-card">
-          <div class="market-header">
-            <div class="market-question">${market.question.slice(0, 45)}${market.question.length > 45 ? '...' : ''}</div>
-            <div class="market-badge category">${market.category}</div>
-          </div>
-          <div class="market-prices">
-            <div class="market-price"><span class="price-label">YES</span><span class="price-value yes">$${market.yesPrice.toFixed(2)}</span></div>
-            <div class="market-price"><span class="price-label">NO</span><span class="price-value no">$${market.noPrice.toFixed(2)}</span></div>
-          </div>
-          <div class="market-meta">
-            <span>💧 $${(market.liquidity / 1000).toFixed(0)}k</span>
-            <span>📊 ${market.spreadPercent}% spread</span>
-          </div>
-        </div>
-      `;
-    }
-
-    async function fetchData() {
-      document.getElementById('status').innerHTML = '<span style="color: var(--warning)">● Scanning...</span>';
       try {
+        log('Connecting to Polymarket CLOB API...', 'info');
+
         const response = await fetch('/api/scan');
         const data = await response.json();
 
-        if (!data.success) throw new Error(data.error);
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
 
-        // Check for new opportunities
-        const currentAlertCount = data.opportunities?.length || 0;
-        if (currentAlertCount > lastAlertCount && lastAlertCount >= 0) {
-          const bestProfit = data.stats?.bestProfit || 0;
-          if (bestProfit > 0) {
-            playAlertSound(bestProfit);
-            showToast('💰', `Arbitrage found! +${bestProfit.toFixed(2)}%`, 5000);
+        if (data.success) {
+          totalScanned += data.stats?.marketsScanned || 0;
+
+          log(`Fetched ${data.stats?.marketsScanned || 0} active markets`, 'success');
+
+          // Log some market activity
+          if (data.liveMarkets && data.liveMarkets.length > 0) {
+            const market = data.liveMarkets[Math.floor(Math.random() * data.liveMarkets.length)];
+            log(`Analyzing: "${market.question?.substring(0, 50)}..."`, 'info');
+            log(`  YES: ${(market.yesPrice * 100).toFixed(1)}% | NO: ${(market.noPrice * 100).toFixed(1)}% | Spread: ${market.spreadPercent}%`, 'info');
           }
-        }
-        lastAlertCount = currentAlertCount;
 
-        // Update stats
-        document.getElementById('marketsScanned').textContent = data.stats?.marketsScanned || 0;
-        document.getElementById('totalFound').textContent = data.stats?.totalFound || 0;
-        document.getElementById('bestProfit').textContent = (data.stats?.bestProfit || 0).toFixed(2) + '%';
-        document.getElementById('status').innerHTML = '<span style="color: var(--success)">● Ready</span>';
-        document.getElementById('oppCount').textContent = (data.opportunities?.length || 0) + ' found';
-        document.getElementById('nearMissCount').textContent = (data.nearMisses?.length || 0) + ' tracking';
-        document.getElementById('liveMarketCount').textContent = (data.liveMarkets?.length || 0) + ' markets';
+          // Check for opportunities
+          if (data.opportunities && data.opportunities.length > 0) {
+            data.opportunities.forEach(opp => {
+              log(`🚨 ARBITRAGE DETECTED: ${opp.arbitrage?.type} +${opp.arbitrage?.profitPercent?.toFixed(2)}%`, 'success');
+              playAlert();
 
-        // Update opportunities
-        if (data.opportunities?.length > 0) {
-          document.getElementById('opportunitiesOutput').innerHTML = data.opportunities.map(formatOpportunity).join('');
+              // Show alert
+              arbAlert.style.display = 'block';
+              setTimeout(() => { arbAlert.style.display = 'none'; }, 3000);
+            });
+            totalOpps += data.opportunities.length;
+          } else {
+            log('No arbitrage opportunities in this scan', 'warning');
+          }
+
+          // Log near misses
+          if (data.nearMisses && data.nearMisses.length > 0) {
+            log(`Found ${data.nearMisses.length} near-miss opportunities`, 'warning');
+          }
+
+          updateStats(data.stats);
+          renderOpportunities(data.opportunities, data.nearMisses);
+
+          playSuccess();
+          log(`Scan #${scanCount} complete. Total markets analyzed: ${totalScanned}`, 'success');
+
         } else {
-          document.getElementById('opportunitiesOutput').innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">🔍</div>
-              <div class="empty-title">No Opportunities Yet</div>
-              <div>Scanning ${data.stats?.marketsScanned || 0} markets...</div>
-              <div style="margin-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
-                Arbitrage is rare on efficient markets.
-              </div>
-            </div>
-          `;
-        }
-
-        // Update near-misses
-        if (data.nearMisses?.length > 0) {
-          document.getElementById('nearMissOutput').innerHTML = data.nearMisses.map(formatNearMiss).join('');
-        } else {
-          document.getElementById('nearMissOutput').innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">⚡</div>
-              <div class="empty-title">Watching for Near-Misses</div>
-              <div>Markets within 5% of arbitrage</div>
-            </div>
-          `;
-        }
-
-        // Update live markets
-        if (data.liveMarkets?.length > 0) {
-          document.getElementById('liveMarketsOutput').innerHTML = data.liveMarkets.map(formatLiveMarket).join('');
+          log(`Scan failed: ${data.error}`, 'error');
         }
 
       } catch (error) {
-        console.error('Fetch error:', error);
-        document.getElementById('status').innerHTML = '<span style="color: var(--error)">● Error</span>';
-        showToast('❌', 'Failed to fetch data', 3000);
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+        log(`Error: ${error.message}`, 'error');
       }
+
+      // Reset progress bar
+      setTimeout(() => { progressBar.style.width = '0%'; }, 500);
     }
 
+    // Sound toggle
+    document.getElementById('soundToggle').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+      if (soundEnabled) {
+        audioCtx.resume();
+        playBeep(600, 100);
+      }
+    });
+
+    // Pause toggle
+    document.getElementById('pauseToggle').addEventListener('click', () => {
+      paused = !paused;
+      document.getElementById('pauseToggle').textContent = paused ? '▶ Resume' : '⏸ Pause';
+      log(paused ? 'Scanner paused' : 'Scanner resumed', 'warning');
+    });
+
     // Initialize
-    updateSoundUI();
-    fetchData();
-    setInterval(fetchData, 10000); // Refresh every 10 seconds
+    log('PolyClaude Arbitrage Scanner v2.0', 'scan');
+    log('Powered by Claude AI + Polymarket CLOB', 'info');
+    log('========================================', 'info');
+    log('Initializing market scanner...', 'info');
+
+    // Start scanning
+    setTimeout(() => {
+      scan();
+      setInterval(scan, 15000); // Scan every 15 seconds
+    }, 1000);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 's' || e.key === 'S') {
+        soundEnabled = !soundEnabled;
+        document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+      }
+      if (e.key === 'r' || e.key === 'R') {
+        scan();
+      }
+      if (e.key === ' ') {
+        e.preventDefault();
+        paused = !paused;
+        document.getElementById('pauseToggle').textContent = paused ? '▶ Resume' : '⏸ Pause';
+      }
+    });
   </script>
 </body>
 </html>
