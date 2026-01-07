@@ -1,11 +1,7 @@
 {
-  "buildCommand": "",
-  "installCommand": "",
-  "outputDirectory": ".",
-  "functions": {
-    "api/*.js": {
-      "memory": 1024,
-      "maxDuration": 30
-    }
-  }
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" }
+  ]
 }
