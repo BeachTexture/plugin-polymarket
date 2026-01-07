@@ -108,6 +108,41 @@
       color: var(--green);
     }
 
+    .contract-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(224, 122, 58, 0.1);
+      border: 1px solid rgba(224, 122, 58, 0.3);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .contract-label {
+      color: var(--text-dim);
+    }
+
+    .contract-value {
+      color: var(--claude-orange);
+      cursor: pointer;
+      padding: 2px 8px;
+      background: rgba(224, 122, 58, 0.1);
+      border-radius: 4px;
+      transition: all 0.2s;
+      user-select: all;
+    }
+
+    .contract-value:hover {
+      background: rgba(224, 122, 58, 0.2);
+    }
+
+    .contract-value.copied {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--green);
+    }
+
     .status-dot {
       width: 8px;
       height: 8px;
@@ -438,6 +473,10 @@
         <div class="logo-icon">🔮</div>
         <span class="logo-text">PolyClaude</span>
       </div>
+      <div class="contract-badge">
+        <span class="contract-label">CA:</span>
+        <span class="contract-value" id="contractAddress" onclick="copyContract()">Coming Soon</span>
+      </div>
       <div class="status-badge">
         <div class="status-dot"></div>
         <span>SCANNING LIVE</span>
@@ -710,6 +749,22 @@
       scan();
       setInterval(scan, 15000); // Scan every 15 seconds
     }, 1000);
+
+    // Copy contract address
+    function copyContract() {
+      const contractEl = document.getElementById('contractAddress');
+      const text = contractEl.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = contractEl.textContent;
+        contractEl.textContent = 'Copied!';
+        contractEl.classList.add('copied');
+        playBeep(800, 100);
+        setTimeout(() => {
+          contractEl.textContent = original;
+          contractEl.classList.remove('copied');
+        }, 1500);
+      });
+    }
 
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
