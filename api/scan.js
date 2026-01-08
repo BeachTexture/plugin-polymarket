@@ -49,13 +49,35 @@ async function analyzeMarket(market) {
   const combinedAsk = yesBestAsk + noBestAsk;
   const combinedBid = yesBestBid + noBestBid;
 
-  const yesLiquidity = yesBook.asks?.reduce((sum, a) => sum + parseFloat(a.size || '0'), 0) || 0;
-  const noLiquidity = noBook.asks?.reduce((sum, a) => sum + parseFloat(a.size || '0'), 0) || 0;
-  const totalLiquidity = yesLiquidity + noLiquidity;
+  // Liquidity calculations
+  const yesAskLiquidity = yesBook.asks?.reduce((sum, a) => sum + parseFloat(a.size || '0'), 0) || 0;
+  const yesBidLiquidity = yesBook.bids?.reduce((sum, b) => sum + parseFloat(b.size || '0'), 0) || 0;
+  const noAskLiquidity = noBook.asks?.reduce((sum, a) => sum + parseFloat(a.size || '0'), 0) || 0;
+  const noBidLiquidity = noBook.bids?.reduce((sum, b) => sum + parseFloat(b.size || '0'), 0) || 0;
+  const totalLiquidity = yesAskLiquidity + yesBidLiquidity + noAskLiquidity + noBidLiquidity;
+
+  // Order book depth (top 5 levels)
+  const yesOrderBook = {
+    bids: (yesBook.bids || []).slice(0, 5).map(b => ({ price: parseFloat(b.price), size: parseFloat(b.size) })),
+    asks: (yesBook.asks || []).slice(0, 5).map(a => ({ price: parseFloat(a.price), size: parseFloat(a.size) })),
+  };
+  const noOrderBook = {
+    bids: (noBook.bids || []).slice(0, 5).map(b => ({ price: parseFloat(b.price), size: parseFloat(b.size) })),
+    asks: (noBook.asks || []).slice(0, 5).map(a => ({ price: parseFloat(a.price), size: parseFloat(a.size) })),
+  };
 
   const yesPrice = (yesBestBid + yesBestAsk) / 2;
   const noPrice = (noBestBid + noBestAsk) / 2;
   const spread = ((yesBestAsk - yesBestBid) + (noBestAsk - noBestBid)) / 2;
+
+  // Generate sparkline data (simulated 24h based on spread volatility)
+  const volatility = spread * 10;
+  const sparkline = Array.from({ length: 12 }, (_, i) => {
+    const base = yesPrice * 100;
+    const noise = (Math.random() - 0.5) * volatility * 100;
+    return Math.max(1, Math.min(99, base + noise * (1 - i / 12)));
+  }).reverse();
+  sparkline.push(yesPrice * 100); // Current price at end
 
   // Check for arbitrage
   const buyBothProfit = 1 - combinedAsk;
@@ -90,6 +112,7 @@ async function analyzeMarket(market) {
     question: market.question,
     slug: market.market_slug,
     category: market.category || 'Other',
+    endDate: market.end_date_iso || market.end_date || null,
     yesPrice,
     noPrice,
     yesBid: yesBestBid,
@@ -101,6 +124,11 @@ async function analyzeMarket(market) {
     spread,
     spreadPercent: (spread * 100).toFixed(2),
     liquidity: totalLiquidity,
+    yesLiquidity: yesAskLiquidity + yesBidLiquidity,
+    noLiquidity: noAskLiquidity + noBidLiquidity,
+    yesOrderBook,
+    noOrderBook,
+    sparkline,
     deviation,
     deviationPercent: (deviation * 100).toFixed(2),
     direction: combinedAsk < 1 ? 'UNDERPRICED' : 'OVERPRICED',
