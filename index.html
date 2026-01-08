@@ -20,6 +20,7 @@
       --red: #ef4444;
       --yellow: #f59e0b;
       --blue: #3b82f6;
+      --purple: #8b5cf6;
     }
 
     body {
@@ -50,9 +51,9 @@
     }
 
     .container {
-      max-width: 1400px;
+      max-width: 1600px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 15px 20px;
     }
 
     /* Header */
@@ -60,26 +61,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 0;
+      padding: 12px 0;
       border-bottom: 1px solid rgba(224, 122, 58, 0.3);
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .logo {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .logo-icon {
-      width: 40px;
-      height: 40px;
+      width: 36px;
+      height: 36px;
       background: linear-gradient(135deg, var(--claude-orange), var(--claude-coral));
-      border-radius: 10px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       animation: pulse 2s infinite;
     }
 
@@ -89,63 +92,55 @@
     }
 
     .logo-text {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: bold;
       background: linear-gradient(135deg, var(--claude-orange), var(--claude-coral));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
-    .status-badge {
+    .header-center {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
+      gap: 12px;
+    }
+
+    .contract-badge, .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+    }
+
+    .status-badge {
       background: rgba(16, 185, 129, 0.1);
       border: 1px solid rgba(16, 185, 129, 0.3);
-      border-radius: 20px;
-      font-size: 12px;
       color: var(--green);
     }
 
     .contract-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
       background: rgba(224, 122, 58, 0.1);
       border: 1px solid rgba(224, 122, 58, 0.3);
-      border-radius: 20px;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    .contract-label {
       color: var(--text-dim);
     }
 
     .contract-value {
       color: var(--claude-orange);
       cursor: pointer;
-      padding: 2px 8px;
+      padding: 2px 6px;
       background: rgba(224, 122, 58, 0.1);
       border-radius: 4px;
       transition: all 0.2s;
-      user-select: all;
     }
 
-    .contract-value:hover {
-      background: rgba(224, 122, 58, 0.2);
-    }
-
-    .contract-value.copied {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--green);
-    }
+    .contract-value:hover { background: rgba(224, 122, 58, 0.2); }
+    .contract-value.copied { background: rgba(16, 185, 129, 0.2); color: var(--green); }
 
     .status-dot {
-      width: 8px;
-      height: 8px;
+      width: 6px;
+      height: 6px;
       background: var(--green);
       border-radius: 50%;
       animation: blink 1s infinite;
@@ -156,19 +151,65 @@
       50% { opacity: 0.3; }
     }
 
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: transparent;
+      color: var(--text-primary);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--claude-orange);
+    }
+
+    /* View Toggle */
+    .view-toggle {
+      display: flex;
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 3px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .view-btn {
+      padding: 6px 14px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      background: var(--claude-orange);
+      color: white;
+    }
+
     /* Stats Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
     }
 
     .stat-card {
       background: var(--bg-card);
       border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 12px;
-      padding: 20px;
+      border-radius: 10px;
+      padding: 14px;
       position: relative;
       overflow: hidden;
     }
@@ -184,15 +225,15 @@
     }
 
     .stat-label {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .stat-value {
-      font-size: 28px;
+      font-size: 22px;
       font-weight: bold;
       color: var(--text-primary);
     }
@@ -200,222 +241,14 @@
     .stat-value.green { color: var(--green); }
     .stat-value.orange { color: var(--claude-orange); }
     .stat-value.yellow { color: var(--yellow); }
-
-    /* Main Layout */
-    .main-grid {
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 20px;
-    }
-
-    /* Terminal */
-    .terminal {
-      background: var(--bg-terminal);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .terminal-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 16px;
-      background: rgba(0,0,0,0.3);
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-
-    .terminal-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-    }
-
-    .terminal-dot.red { background: #ff5f56; }
-    .terminal-dot.yellow { background: #ffbd2e; }
-    .terminal-dot.green { background: #27ca40; }
-
-    .terminal-title {
-      margin-left: 10px;
-      font-size: 12px;
-      color: var(--text-dim);
-    }
-
-    .terminal-body {
-      height: 500px;
-      overflow-y: auto;
-      padding: 16px;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-
-    .terminal-body::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .terminal-body::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .terminal-body::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.1);
-      border-radius: 3px;
-    }
-
-    .log-line {
-      margin-bottom: 4px;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(-10px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .log-time {
-      color: var(--text-dim);
-      margin-right: 10px;
-    }
-
-    .log-info { color: var(--blue); }
-    .log-success { color: var(--green); }
-    .log-warning { color: var(--yellow); }
-    .log-error { color: var(--red); }
-    .log-scan { color: var(--claude-orange); }
-
-    /* Opportunities Panel */
-    .panel {
-      background: var(--bg-card);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .panel-header {
-      padding: 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .panel-title {
-      font-size: 14px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .panel-body {
-      padding: 16px;
-      height: 456px;
-      overflow-y: auto;
-    }
-
-    .opportunity-card {
-      background: rgba(16, 185, 129, 0.05);
-      border: 1px solid rgba(16, 185, 129, 0.2);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      animation: slideIn 0.5s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .opportunity-card.near-miss {
-      background: rgba(245, 158, 11, 0.05);
-      border-color: rgba(245, 158, 11, 0.2);
-    }
-
-    .opp-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      margin-bottom: 8px;
-    }
-
-    .opp-question {
-      font-size: 12px;
-      color: var(--text-primary);
-      flex: 1;
-      margin-right: 10px;
-    }
-
-    .opp-profit {
-      font-size: 14px;
-      font-weight: bold;
-      color: var(--green);
-      white-space: nowrap;
-    }
-
-    .opp-details {
-      display: flex;
-      gap: 15px;
-      font-size: 11px;
-      color: var(--text-dim);
-    }
-
-    .market-item {
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      font-size: 12px;
-    }
-
-    .market-item:last-child {
-      border-bottom: none;
-    }
-
-    .market-question {
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
-
-    .market-stats {
-      display: flex;
-      gap: 15px;
-      color: var(--text-dim);
-      font-size: 11px;
-    }
-
-    .market-stats span {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Sound Toggle */
-    .controls {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: transparent;
-      color: var(--text-primary);
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-    }
-
-    .btn:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: var(--claude-orange);
-    }
+    .stat-value.blue { color: var(--blue); }
 
     /* Progress bar */
     .scan-progress {
       height: 3px;
       background: rgba(255,255,255,0.05);
       border-radius: 2px;
-      margin-top: 20px;
+      margin-bottom: 15px;
       overflow: hidden;
     }
 
@@ -426,23 +259,276 @@
       transition: width 0.3s ease;
     }
 
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .main-grid {
-        grid-template-columns: 1fr;
-      }
-      .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
+    /* Main Layout */
+    .main-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
     }
 
-    @media (max-width: 600px) {
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
+    /* Terminal */
+    .terminal {
+      background: var(--bg-terminal);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
     }
 
-    /* Glow effect for arb found */
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27ca40; }
+
+    .terminal-title {
+      margin-left: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .terminal-body {
+      height: 420px;
+      overflow-y: auto;
+      padding: 12px;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .terminal-body::-webkit-scrollbar { width: 4px; }
+    .terminal-body::-webkit-scrollbar-track { background: transparent; }
+    .terminal-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    .log-line {
+      margin-bottom: 3px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .log-time { color: var(--text-dim); margin-right: 8px; }
+    .log-info { color: var(--blue); }
+    .log-success { color: var(--green); }
+    .log-warning { color: var(--yellow); }
+    .log-error { color: var(--red); }
+    .log-scan { color: var(--claude-orange); }
+
+    /* Markets Panel - Polymarket Style */
+    .markets-panel {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-size: 13px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-tabs {
+      display: flex;
+      gap: 4px;
+    }
+
+    .panel-tab {
+      padding: 4px 10px;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 10px;
+      transition: all 0.2s;
+    }
+
+    .panel-tab.active {
+      background: rgba(224, 122, 58, 0.2);
+      color: var(--claude-orange);
+    }
+
+    .markets-list {
+      height: 420px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    /* Market Card - Polymarket Style */
+    .market-card {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .market-card:hover {
+      border-color: rgba(224, 122, 58, 0.3);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .market-card.arb {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.05);
+    }
+
+    .market-card.near-miss {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.03);
+    }
+
+    .market-question {
+      font-size: 12px;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .market-prices {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .price-box {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .price-box.yes {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .price-box.no {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .price-label {
+      font-size: 9px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    .price-value {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .price-box.yes .price-value { color: var(--green); }
+    .price-box.no .price-value { color: var(--red); }
+
+    .market-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: var(--text-dim);
+    }
+
+    .market-badge {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: bold;
+    }
+
+    .market-badge.arb {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--green);
+    }
+
+    .market-badge.near {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--yellow);
+    }
+
+    /* Bottom Grid */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .opps-panel {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .opps-list {
+      height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .opp-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 11px;
+    }
+
+    .opp-item.near {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .opp-question {
+      flex: 1;
+      margin-right: 10px;
+      color: var(--text-primary);
+    }
+
+    .opp-profit {
+      font-weight: bold;
+      color: var(--green);
+    }
+
+    .opp-item.near .opp-profit {
+      color: var(--yellow);
+    }
+
+    /* Alert */
     .arb-alert {
       position: fixed;
       top: 50%;
@@ -450,9 +536,9 @@
       transform: translate(-50%, -50%);
       background: rgba(16, 185, 129, 0.95);
       color: white;
-      padding: 30px 50px;
-      border-radius: 16px;
-      font-size: 24px;
+      padding: 25px 40px;
+      border-radius: 12px;
+      font-size: 20px;
       font-weight: bold;
       z-index: 2000;
       animation: alertPop 0.5s ease;
@@ -464,6 +550,18 @@
       50% { transform: translate(-50%, -50%) scale(1.1); }
       100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .main-content { grid-template-columns: 1fr; }
+      .bottom-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .header-center { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -473,17 +571,20 @@
         <div class="logo-icon">🔮</div>
         <span class="logo-text">PolyClaude</span>
       </div>
-      <div class="contract-badge">
-        <span class="contract-label">CA:</span>
-        <span class="contract-value" id="contractAddress" onclick="copyContract()">Coming Soon</span>
-      </div>
-      <div class="status-badge">
-        <div class="status-dot"></div>
-        <span>SCANNING LIVE</span>
+      <div class="header-center">
+        <div class="contract-badge">
+          <span>CA:</span>
+          <span class="contract-value" id="contractAddress" onclick="copyContract()">Coming Soon</span>
+        </div>
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span>SCANNING LIVE</span>
+        </div>
       </div>
       <div class="controls">
-        <button class="btn" id="soundToggle">🔊 Sound: ON</button>
+        <button class="btn" id="soundToggle">🔊 Sound</button>
         <button class="btn" id="pauseToggle">⏸ Pause</button>
+        <button class="btn" onclick="scan()">🔄 Scan</button>
       </div>
     </header>
 
@@ -493,7 +594,7 @@
         <div class="stat-value" id="marketsScanned">0</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Opportunities Found</div>
+        <div class="stat-label">Arbitrage Opps</div>
         <div class="stat-value green" id="oppsFound">0</div>
       </div>
       <div class="stat-card">
@@ -504,50 +605,79 @@
         <div class="stat-label">Best Profit</div>
         <div class="stat-value orange" id="bestProfit">0%</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Scans</div>
+        <div class="stat-value blue" id="totalScans">0</div>
+      </div>
     </div>
 
     <div class="scan-progress">
       <div class="scan-progress-bar" id="progressBar"></div>
     </div>
 
-    <div class="main-grid" style="margin-top: 20px;">
+    <div class="main-content">
+      <!-- Terminal Panel -->
       <div class="terminal">
         <div class="terminal-header">
           <div class="terminal-dot red"></div>
           <div class="terminal-dot yellow"></div>
           <div class="terminal-dot green"></div>
-          <span class="terminal-title">polymarket-scanner.exe</span>
+          <span class="terminal-title">polymarket-scanner.exe — Live Feed</span>
         </div>
         <div class="terminal-body" id="terminal"></div>
       </div>
 
-      <div class="panel">
+      <!-- Markets Panel - Polymarket Style -->
+      <div class="markets-panel">
         <div class="panel-header">
-          <span class="panel-title">💰 Live Opportunities</span>
-          <span id="oppCount" style="color: var(--text-dim); font-size: 12px;">0 active</span>
+          <span class="panel-title">📊 Live Markets</span>
+          <div class="panel-tabs">
+            <button class="panel-tab active" onclick="showTab('all')">All</button>
+            <button class="panel-tab" onclick="showTab('arb')">Arb</button>
+            <button class="panel-tab" onclick="showTab('near')">Near</button>
+          </div>
         </div>
-        <div class="panel-body" id="opportunities"></div>
+        <div class="markets-list" id="marketsList"></div>
+      </div>
+    </div>
+
+    <div class="bottom-grid">
+      <!-- Opportunities Panel -->
+      <div class="opps-panel">
+        <div class="panel-header">
+          <span class="panel-title">💰 Arbitrage Opportunities</span>
+          <span id="arbCount" style="color: var(--green); font-size: 11px;">0 found</span>
+        </div>
+        <div class="opps-list" id="arbList"></div>
+      </div>
+
+      <!-- Near Misses Panel -->
+      <div class="opps-panel">
+        <div class="panel-header">
+          <span class="panel-title">⚡ Near Misses</span>
+          <span id="nearCount" style="color: var(--yellow); font-size: 11px;">0 found</span>
+        </div>
+        <div class="opps-list" id="nearList"></div>
       </div>
     </div>
   </div>
 
-  <div class="arb-alert" id="arbAlert">
-    💰 ARBITRAGE FOUND!
-  </div>
+  <div class="arb-alert" id="arbAlert">💰 ARBITRAGE FOUND!</div>
 
   <script>
     const terminal = document.getElementById('terminal');
-    const opportunities = document.getElementById('opportunities');
+    const marketsList = document.getElementById('marketsList');
+    const arbList = document.getElementById('arbList');
+    const nearList = document.getElementById('nearList');
     const progressBar = document.getElementById('progressBar');
     const arbAlert = document.getElementById('arbAlert');
 
     let soundEnabled = true;
     let paused = false;
-    let totalScanned = 0;
-    let totalOpps = 0;
     let scanCount = 0;
+    let currentTab = 'all';
+    let lastData = null;
 
-    // Audio context for sounds
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
     function playBeep(freq = 800, duration = 100, type = 'sine') {
@@ -586,9 +716,7 @@
       line.innerHTML = `<span class="log-time">[${getTime()}]</span><span class="log-${type}">${message}</span>`;
       terminal.appendChild(line);
       terminal.scrollTop = terminal.scrollHeight;
-
-      // Keep only last 200 lines
-      while (terminal.children.length > 200) {
+      while (terminal.children.length > 150) {
         terminal.removeChild(terminal.firstChild);
       }
     }
@@ -598,50 +726,105 @@
       document.getElementById('oppsFound').textContent = stats.totalFound || 0;
       document.getElementById('nearMisses').textContent = stats.nearMissCount || 0;
       document.getElementById('bestProfit').textContent = (stats.bestProfit || 0).toFixed(2) + '%';
-      document.getElementById('oppCount').textContent = `${stats.totalFound || 0} active`;
+      document.getElementById('totalScans').textContent = scanCount;
+      document.getElementById('arbCount').textContent = `${stats.totalFound || 0} found`;
+      document.getElementById('nearCount').textContent = `${stats.nearMissCount || 0} found`;
+    }
+
+    function showTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.panel-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      if (lastData) renderMarkets(lastData);
+    }
+
+    function renderMarkets(data) {
+      lastData = data;
+      marketsList.innerHTML = '';
+
+      let markets = data.liveMarkets || [];
+
+      // Add arb badge to opportunities
+      const arbSlugs = (data.opportunities || []).map(o => o.slug);
+      const nearSlugs = (data.nearMisses || []).map(n => n.slug);
+
+      markets = markets.map(m => ({
+        ...m,
+        isArb: arbSlugs.includes(m.slug),
+        isNear: nearSlugs.includes(m.slug)
+      }));
+
+      // Filter by tab
+      if (currentTab === 'arb') {
+        markets = markets.filter(m => m.isArb);
+      } else if (currentTab === 'near') {
+        markets = markets.filter(m => m.isNear);
+      }
+
+      if (markets.length === 0) {
+        marketsList.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 40px;">No markets to display</div>';
+        return;
+      }
+
+      markets.forEach(market => {
+        const card = document.createElement('div');
+        card.className = `market-card ${market.isArb ? 'arb' : ''} ${market.isNear ? 'near-miss' : ''}`;
+
+        const yesPercent = ((market.yesPrice || 0) * 100).toFixed(0);
+        const noPercent = ((market.noPrice || 0) * 100).toFixed(0);
+
+        card.innerHTML = `
+          <div class="market-question">${market.question || 'Unknown Market'}</div>
+          <div class="market-prices">
+            <div class="price-box yes">
+              <div class="price-label">Yes</div>
+              <div class="price-value">${yesPercent}¢</div>
+            </div>
+            <div class="price-box no">
+              <div class="price-label">No</div>
+              <div class="price-value">${noPercent}¢</div>
+            </div>
+          </div>
+          <div class="market-meta">
+            <span>Spread: ${market.spreadPercent || '0'}%</span>
+            ${market.isArb ? '<span class="market-badge arb">ARB</span>' : ''}
+            ${market.isNear ? '<span class="market-badge near">NEAR</span>' : ''}
+          </div>
+        `;
+        marketsList.appendChild(card);
+      });
     }
 
     function renderOpportunities(opps, nearMisses) {
-      opportunities.innerHTML = '';
+      arbList.innerHTML = '';
+      nearList.innerHTML = '';
 
       if (opps && opps.length > 0) {
         opps.forEach(opp => {
-          const card = document.createElement('div');
-          card.className = 'opportunity-card';
-          card.innerHTML = `
-            <div class="opp-header">
-              <div class="opp-question">${opp.question}</div>
-              <div class="opp-profit">+${opp.arbitrage?.profitPercent?.toFixed(2) || 0}%</div>
-            </div>
-            <div class="opp-details">
-              <span>Type: ${opp.arbitrage?.type || 'N/A'}</span>
-              <span>Combined: ${opp.combinedAsk?.toFixed(3) || 'N/A'}</span>
-            </div>
+          const item = document.createElement('div');
+          item.className = 'opp-item';
+          item.innerHTML = `
+            <span class="opp-question">${opp.question?.substring(0, 40)}...</span>
+            <span class="opp-profit">+${opp.arbitrage?.profitPercent?.toFixed(2) || 0}%</span>
           `;
-          opportunities.appendChild(card);
+          arbList.appendChild(item);
         });
+      } else {
+        arbList.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 20px; font-size: 11px;">No arbitrage opportunities yet</div>';
       }
 
       if (nearMisses && nearMisses.length > 0) {
-        nearMisses.slice(0, 5).forEach(nm => {
-          const card = document.createElement('div');
-          card.className = 'opportunity-card near-miss';
-          card.innerHTML = `
-            <div class="opp-header">
-              <div class="opp-question">${nm.question}</div>
-              <div class="opp-profit" style="color: var(--yellow);">${nm.deviationPercent}% off</div>
-            </div>
-            <div class="opp-details">
-              <span>Direction: ${nm.direction}</span>
-              <span>Spread: ${nm.spreadPercent}%</span>
-            </div>
+        nearMisses.slice(0, 10).forEach(nm => {
+          const item = document.createElement('div');
+          item.className = 'opp-item near';
+          item.innerHTML = `
+            <span class="opp-question">${nm.question?.substring(0, 40)}...</span>
+            <span class="opp-profit">${nm.deviationPercent}% off</span>
           `;
-          opportunities.appendChild(card);
+          nearList.appendChild(item);
         });
-      }
-
-      if ((!opps || opps.length === 0) && (!nearMisses || nearMisses.length === 0)) {
-        opportunities.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 40px;">Scanning for opportunities...</div>';
+      } else {
+        nearList.innerHTML = '<div style="color: var(--text-dim); text-align: center; padding: 20px; font-size: 11px;">No near misses yet</div>';
       }
     }
 
@@ -652,7 +835,6 @@
       log(`Initiating scan #${scanCount}...`, 'scan');
       playBeep(400, 50);
 
-      // Animate progress
       progressBar.style.width = '0%';
       let progress = 0;
       const progressInterval = setInterval(() => {
@@ -670,42 +852,37 @@
         progressBar.style.width = '100%';
 
         if (data.success) {
-          totalScanned += data.stats?.marketsScanned || 0;
-
           log(`Fetched ${data.stats?.marketsScanned || 0} active markets`, 'success');
 
-          // Log some market activity
+          // Log random market
           if (data.liveMarkets && data.liveMarkets.length > 0) {
             const market = data.liveMarkets[Math.floor(Math.random() * data.liveMarkets.length)];
-            log(`Analyzing: "${market.question?.substring(0, 50)}..."`, 'info');
-            log(`  YES: ${(market.yesPrice * 100).toFixed(1)}% | NO: ${(market.noPrice * 100).toFixed(1)}% | Spread: ${market.spreadPercent}%`, 'info');
+            log(`Analyzing: "${market.question?.substring(0, 45)}..."`, 'info');
+            log(`  YES: ${(market.yesPrice * 100).toFixed(1)}¢ | NO: ${(market.noPrice * 100).toFixed(1)}¢`, 'info');
           }
 
           // Check for opportunities
           if (data.opportunities && data.opportunities.length > 0) {
             data.opportunities.forEach(opp => {
-              log(`🚨 ARBITRAGE DETECTED: ${opp.arbitrage?.type} +${opp.arbitrage?.profitPercent?.toFixed(2)}%`, 'success');
+              log(`🚨 ARBITRAGE: ${opp.arbitrage?.type} +${opp.arbitrage?.profitPercent?.toFixed(2)}%`, 'success');
               playAlert();
-
-              // Show alert
               arbAlert.style.display = 'block';
               setTimeout(() => { arbAlert.style.display = 'none'; }, 3000);
             });
-            totalOpps += data.opportunities.length;
           } else {
-            log('No arbitrage opportunities in this scan', 'warning');
+            log('No arbitrage in this scan', 'warning');
           }
 
-          // Log near misses
           if (data.nearMisses && data.nearMisses.length > 0) {
             log(`Found ${data.nearMisses.length} near-miss opportunities`, 'warning');
           }
 
           updateStats(data.stats);
+          renderMarkets(data);
           renderOpportunities(data.opportunities, data.nearMisses);
 
           playSuccess();
-          log(`Scan #${scanCount} complete. Total markets analyzed: ${totalScanned}`, 'success');
+          log(`Scan #${scanCount} complete ✓`, 'success');
 
         } else {
           log(`Scan failed: ${data.error}`, 'error');
@@ -717,40 +894,9 @@
         log(`Error: ${error.message}`, 'error');
       }
 
-      // Reset progress bar
       setTimeout(() => { progressBar.style.width = '0%'; }, 500);
     }
 
-    // Sound toggle
-    document.getElementById('soundToggle').addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
-      if (soundEnabled) {
-        audioCtx.resume();
-        playBeep(600, 100);
-      }
-    });
-
-    // Pause toggle
-    document.getElementById('pauseToggle').addEventListener('click', () => {
-      paused = !paused;
-      document.getElementById('pauseToggle').textContent = paused ? '▶ Resume' : '⏸ Pause';
-      log(paused ? 'Scanner paused' : 'Scanner resumed', 'warning');
-    });
-
-    // Initialize
-    log('PolyClaude Arbitrage Scanner v2.0', 'scan');
-    log('Powered by Claude AI + Polymarket CLOB', 'info');
-    log('========================================', 'info');
-    log('Initializing market scanner...', 'info');
-
-    // Start scanning
-    setTimeout(() => {
-      scan();
-      setInterval(scan, 15000); // Scan every 15 seconds
-    }, 1000);
-
-    // Copy contract address
     function copyContract() {
       const contractEl = document.getElementById('contractAddress');
       const text = contractEl.textContent;
@@ -766,21 +912,46 @@
       });
     }
 
+    // Event listeners
+    document.getElementById('soundToggle').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound' : '🔇 Muted';
+      if (soundEnabled) {
+        audioCtx.resume();
+        playBeep(600, 100);
+      }
+    });
+
+    document.getElementById('pauseToggle').addEventListener('click', () => {
+      paused = !paused;
+      document.getElementById('pauseToggle').textContent = paused ? '▶ Resume' : '⏸ Pause';
+      log(paused ? 'Scanner paused' : 'Scanner resumed', 'warning');
+    });
+
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
       if (e.key === 's' || e.key === 'S') {
         soundEnabled = !soundEnabled;
-        document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+        document.getElementById('soundToggle').textContent = soundEnabled ? '🔊 Sound' : '🔇 Muted';
       }
-      if (e.key === 'r' || e.key === 'R') {
-        scan();
-      }
+      if (e.key === 'r' || e.key === 'R') scan();
       if (e.key === ' ') {
         e.preventDefault();
         paused = !paused;
         document.getElementById('pauseToggle').textContent = paused ? '▶ Resume' : '⏸ Pause';
       }
     });
+
+    // Initialize
+    log('PolyClaude Arbitrage Scanner v2.0', 'scan');
+    log('Powered by Claude AI + Polymarket CLOB', 'info');
+    log('========================================', 'info');
+    log('Initializing market scanner...', 'info');
+
+    setTimeout(() => {
+      scan();
+      setInterval(scan, 15000);
+    }, 1000);
   </script>
 </body>
 </html>
